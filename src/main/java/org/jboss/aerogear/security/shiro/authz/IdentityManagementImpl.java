@@ -19,9 +19,12 @@ public class IdentityManagementImpl implements IdentityManagement {
     @Inject
     private EntityManager entityManager;
 
+    @Inject
+    private GrantConfiguration grantConfiguration;
+
     @Override
     public GrantMethods grant(String... roles) {
-        return null;
+        return grantConfiguration.roles(roles);
     }
 
     @Override
@@ -43,15 +46,6 @@ public class IdentityManagementImpl implements IdentityManagement {
     public void create(AeroGearUser aeroGearUser) {
         User user = new User(aeroGearUser.getUsername(),
                 new Sha512Hash(aeroGearUser.getPassword()).toHex());
-
-        user.setRoles(buildRoles());
         entityManager.persist(user);
-    }
-
-    private Set<Role> buildRoles(){
-        Set<Role> roles = new HashSet<Role>();
-        Role role = entityManager.find(Role.class, 2L);
-        roles.add(role);
-        return roles;
     }
 }

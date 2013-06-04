@@ -9,11 +9,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import java.util.Set;
 
 @Entity
 @Table(name = "roles")
+@NamedQuery(name = "Role.findByName", query = "select r from Role r where r.name = :name")
 public class Role {
 
     private Long id;
