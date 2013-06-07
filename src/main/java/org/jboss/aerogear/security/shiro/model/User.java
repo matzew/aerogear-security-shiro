@@ -1,5 +1,7 @@
 package org.jboss.aerogear.security.shiro.model;
 
+import org.jboss.aerogear.security.model.AeroGearUser;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,13 +18,25 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @NamedQuery(name = "User.findByUsername", query = "select u from User u where u.username = :username")
-public class User {
+public class User implements AeroGearUser {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(length = 100)
     private String username;
-    private String email;
+
+    @Column(length = 255)
     private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles")
     private Set<Role> roles = new HashSet<Role>();
+
+    private String secret;
+
+    private String email;
 
     public User() {
     }
@@ -32,8 +46,6 @@ public class User {
         this.password = password;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
         return id;
     }
@@ -47,19 +59,22 @@ public class User {
      *
      * @return the username associated with this user account;
      */
-    @Column(length = 100)
+    @Override
     public String getUsername() {
         return username;
     }
 
+    @Override
     public void setUsername(String username) {
         this.username = username;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
 
+    @Override
     public void setEmail(String email) {
         this.email = email;
     }
@@ -69,24 +84,30 @@ public class User {
      *
      * @return this user's password
      */
-    @Column(length = 255)
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public void setPassword(String password) {
         this.password = password;
     }
 
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles")
     public Set<Role> getRoles() {
         return roles;
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 
 }

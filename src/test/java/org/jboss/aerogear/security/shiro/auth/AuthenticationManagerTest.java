@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 public class AuthenticationManagerTest {
 
     @Mock
-    private AeroGearUser aeroGearUser;
+    private AeroGearUser user;
     @Mock
     private Subject subject;
     @Mock
@@ -28,8 +28,8 @@ public class AuthenticationManagerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        when(aeroGearUser.getUsername()).thenReturn("john");
-        when(aeroGearUser.getPassword()).thenReturn("123");
+        when(user.getUsername()).thenReturn("john");
+        when(user.getPassword()).thenReturn("123");
         when(session.getId()).thenReturn("test");
         when(subject.getSession()).thenReturn(session);
     }
@@ -37,13 +37,13 @@ public class AuthenticationManagerTest {
     @Test
     public void testLogin() throws Exception {
         when(subject.isAuthenticated()).thenReturn(true);
-        authenticationManager.login(aeroGearUser);
+        authenticationManager.login(user);
     }
 
     @Test(expected = RuntimeException.class)
     public void testInvalidLogin() throws Exception {
         when(subject.isAuthenticated()).thenReturn(false);
-        authenticationManager.login(aeroGearUser);
+        authenticationManager.login(user);
     }
 
     @Test
