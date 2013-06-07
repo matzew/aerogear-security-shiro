@@ -1,8 +1,6 @@
 package org.jboss.aerogear.security.shiro.authz;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Sha512Hash;
-import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.jboss.aerogear.security.auth.LoggedUser;
 import org.jboss.aerogear.security.auth.Secret;
@@ -84,7 +82,7 @@ public class IdentityManagementImpl implements IdentityManagement {
     public String getSecret() {
         Long id = (Long) subject.getPrincipal();
         User user = entityManager.find(User.class, id);
-        if(user.getSecret() == null){
+        if (user.getSecret() == null) {
             user.setSecret(Base32.random());
             entityManager.merge(user);
         }
