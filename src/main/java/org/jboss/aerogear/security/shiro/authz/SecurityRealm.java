@@ -11,6 +11,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.Sha512Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.jboss.aerogear.security.authz.IdentityManagement;
 import org.jboss.aerogear.security.shiro.model.Role;
 import org.jboss.aerogear.security.shiro.model.User;
 
@@ -21,7 +22,7 @@ import javax.persistence.Query;
 public class SecurityRealm extends AuthorizingRealm {
 
     @Inject
-    private EntityManager entityManager;
+    private IdentityManagement identityManagerment;
 
     public SecurityRealm() {
         setName("SecurityRealm");
@@ -32,21 +33,20 @@ public class SecurityRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authToken) throws AuthenticationException {
 
         UsernamePasswordToken token = (UsernamePasswordToken) authToken;
-        Query query = entityManager.createNamedQuery("User.findByUsername", User.class)
-                .setParameter("username", token.getUsername());
-        User user = (User) query.getSingleResult();
+
+        User user = (User) identityManagerment.findByUsername(token.getUsername());
 
         if (user != null) {
             return new SimpleAuthenticationInfo(user.getId(), new Sha512Hash(user.getPassword()), getName());
         } else {
-            return null;
+            throw new RuntimeException("Authentication failed");
         }
     }
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Long userId = (Long) principals.fromRealm(getName()).iterator().next();
-        User user = entityManager.find(User.class, userId);
+        User user = (User) identityManagerment.findById(userId);
         if (user != null) {
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
             for (Role role : user.getRoles()) {
