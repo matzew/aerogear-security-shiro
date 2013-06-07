@@ -7,7 +7,6 @@ import org.jboss.aerogear.security.auth.Secret;
 import org.jboss.aerogear.security.authz.IdentityManagement;
 import org.jboss.aerogear.security.model.AeroGearUser;
 import org.jboss.aerogear.security.otp.api.Base32;
-import org.jboss.aerogear.security.shiro.model.Role;
 import org.jboss.aerogear.security.shiro.model.User;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -16,6 +15,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @ApplicationScoped
 public class IdentityManagementImpl implements IdentityManagement {
@@ -61,12 +61,12 @@ public class IdentityManagementImpl implements IdentityManagement {
         entityManager.remove(user);
     }
 
+    /**
+     * TODO: Not sure how import it is ATM
+     */
     @Override
-    public List<AeroGearUser> findAllByRole(String name) {
-        Role role = entityManager.createNamedQuery("Role.findByName", Role.class)
-                .setParameter("name", name)
-                .getSingleResult();
-        //TODO
+    public List<AeroGearUser> findAllByRole(String roleName) {
+
         return new ArrayList<AeroGearUser>();
     }
 
@@ -96,5 +96,9 @@ public class IdentityManagementImpl implements IdentityManagement {
         User user = entityManager.find(User.class, id);
 
         return user.getUsername();
+    }
+
+    public boolean hasRoles(Set<String> roles) {
+        return subject.hasAllRoles(roles);
     }
 }
