@@ -26,15 +26,17 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
     private Serializable sessionId;
 
     @Override
-    public boolean login(AeroGearUser aeroGearUser) {
-        UsernamePasswordToken token = new UsernamePasswordToken(aeroGearUser.getUsername(),
-                new Sha512Hash(aeroGearUser.getPassword()).toHex());
+    public boolean login(AeroGearUser user) {
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),
+                new Sha512Hash(user.getPassword()).toHex());
 
         subject.login(token);
-        if (!subject.isAuthenticated()) {
+        if (subject.isAuthenticated()) {
+            sessionId = subject.getSession().getId();
+        } else {
             throw new RuntimeException("Authentication failed");
         }
-        sessionId = subject.getSession().getId();
+
         return true;
     }
 
