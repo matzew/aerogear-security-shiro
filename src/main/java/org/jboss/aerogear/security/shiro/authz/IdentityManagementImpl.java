@@ -35,7 +35,7 @@ public class IdentityManagementImpl implements IdentityManagement<User> {
     }
 
     @Override
-    public AeroGearUser findByUsername(String username) throws RuntimeException {
+    public User findByUsername(String username) throws RuntimeException {
         User user = entityManager.createNamedQuery("User.findByUsername", User.class)
                 .setParameter("username", username)
                 .getSingleResult();
