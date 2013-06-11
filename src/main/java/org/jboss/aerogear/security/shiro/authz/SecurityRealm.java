@@ -16,8 +16,6 @@ import org.jboss.aerogear.security.shiro.model.Role;
 import org.jboss.aerogear.security.shiro.model.User;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 public class SecurityRealm extends AuthorizingRealm {
 

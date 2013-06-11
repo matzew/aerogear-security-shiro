@@ -3,7 +3,6 @@ package org.jboss.aerogear.security.shiro.authz;
 import org.apache.shiro.subject.Subject;
 import org.jboss.aerogear.security.model.AeroGearUser;
 import org.jboss.aerogear.security.shiro.model.User;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;

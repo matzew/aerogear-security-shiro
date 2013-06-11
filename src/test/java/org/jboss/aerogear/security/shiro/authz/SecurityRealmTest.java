@@ -31,7 +31,6 @@ public class SecurityRealmTest {
     private SecurityRealm securityRealm;
 
 
-
     @Before
     public void setUp() throws Exception {
         securityRealm = new SecurityRealm();

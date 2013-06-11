@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 @ApplicationScoped
-public class IdentityManagementImpl implements IdentityManagement {
+public class IdentityManagementImpl implements IdentityManagement<User> {
 
     @Inject
     private EntityManager entityManager;
@@ -97,11 +97,11 @@ public class IdentityManagementImpl implements IdentityManagement {
     }
 
     /**
-     * TODO: Not sure how import it is ATM
+     * TODO: To be implemented
      */
     @Override
-    public List<AeroGearUser> findAllByRole(String roleName) {
+    public List<User> findAllByRole(String roleName) {
 
-        return new ArrayList<AeroGearUser>();
+        return new ArrayList<User>();
     }
 }
