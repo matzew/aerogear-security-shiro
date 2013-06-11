@@ -61,15 +61,6 @@ public class IdentityManagementImpl implements IdentityManagement {
         entityManager.remove(user);
     }
 
-    /**
-     * TODO: Not sure how import it is ATM
-     */
-    @Override
-    public List<AeroGearUser> findAllByRole(String roleName) {
-
-        return new ArrayList<AeroGearUser>();
-    }
-
     @Override
     public void create(AeroGearUser aeroGearUser) {
         User user = new User(aeroGearUser.getUsername(),
@@ -79,6 +70,7 @@ public class IdentityManagementImpl implements IdentityManagement {
 
     @Produces
     @Secret
+    @Override
     public String getSecret() {
         Long id = (Long) subject.getPrincipal();
         User user = entityManager.find(User.class, id);
@@ -91,6 +83,7 @@ public class IdentityManagementImpl implements IdentityManagement {
 
     @Produces
     @LoggedUser
+    @Override
     public String getLogin() {
         Long id = (Long) subject.getPrincipal();
         User user = entityManager.find(User.class, id);
@@ -98,7 +91,17 @@ public class IdentityManagementImpl implements IdentityManagement {
         return user.getUsername();
     }
 
+    @Override
     public boolean hasRoles(Set<String> roles) {
         return subject.hasAllRoles(roles);
+    }
+
+    /**
+     * TODO: Not sure how import it is ATM
+     */
+    @Override
+    public List<AeroGearUser> findAllByRole(String roleName) {
+
+        return new ArrayList<AeroGearUser>();
     }
 }

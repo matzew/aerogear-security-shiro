@@ -45,17 +45,22 @@ public class SecurityRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        Long userId = (Long) principals.fromRealm(getName()).iterator().next();
-        User user = (User) identityManagerment.findById(userId);
-        if (user != null) {
-            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-            for (Role role : user.getRoles()) {
-                info.addRole(role.getName());
-                info.addStringPermissions(role.getPermissions());
+
+        try {
+            Long userId = (Long) (principals.fromRealm(getName()).iterator().next());
+            User user = (User) identityManagerment.findById(userId);
+            if (user != null) {
+                SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+                for (Role role : user.getRoles()) {
+                    info.addRole(role.getName());
+                    info.addStringPermissions(role.getPermissions());
+                }
+                return info;
+            } else {
+                throw new RuntimeException("Not authorized");
             }
-            return info;
-        } else {
-            return null;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Authorization has failed");
         }
     }
 
